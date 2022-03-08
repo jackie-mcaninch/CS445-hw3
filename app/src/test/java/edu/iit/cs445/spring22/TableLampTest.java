@@ -14,29 +14,180 @@ class TableLampTest {
 	
 	Lightbulb testLight = new Lightbulb();
 	Button testButton = new Button(testLight);
+	PushdownButton testPButton = new PushdownButton(testLight);
+	TableLamp testTLamp = new TableLamp(testLight);
 	PrintStream old = System.out;
 	OutputStream baos = new ByteArrayOutputStream();
 	PrintStream ps = new PrintStream(baos);
 	
-    @Test
+	@Test
     void test_button_direct_switch_on() {
-		System.setOut(ps);
-		ps.flush();
 		testButton.switchOn();
-		testButton.switchOn();
-		String msg = baos.toString();
-		System.setOut(old);
-		assertEquals(String.format("Button switched to ON\nButton switched to ON"), msg);
+		testButton.switchOn(); // regular button should still be on if switched twice
+		assertEquals(testButton.isOn(), true);
     }
     
     @Test
     void test_button_direct_switch_off() {
+		testButton.switchOff();
+		testButton.switchOff();	// regular button should still be off if switched twice
+		assertEquals(testButton.isOn(), false);
+    }
+	
+    @Test
+    void test_lightbulb_direct_switch_on() {
+		testLight.on();
+		testLight.on(); // lightbulb should still be on if switched twice
+		assertEquals(testLight.isOn(), true);
+    }
+    
+    @Test
+    void test_lightbulb_direct_switch_off() {
+		testLight.off();
+		testLight.off(); // lightbulb should still be off if switched twice
+		assertEquals(testButton.isOn(), false);
+    }
+    
+    @Test
+    void test_lightbulb_switch_on_from_button() {
+    	testButton.switchOn();
+    	assertEquals(testLight.isOn(), true);    	
+    }
+    
+    @Test
+    void test_lightbulb_switch_off_from_button() {
+    	testButton.switchOff();
+    	assertEquals(testLight.isOn(), false);    	
+    }
+    
+    @Test
+    void test_button_direct_switch_on_message() {
+		System.setOut(ps);
+		ps.flush();
+		testButton.switchOn();
+		testButton.switchOn(); // regular button should print the same if switched twice
+		String msg = baos.toString();
+		assertEquals(String.format("Button switched to ON\n"
+				 				 + "Lightbulb on.\n"
+				 				 + "Button switched to ON\n"
+				 				 + "Lightbulb on.\n"), msg);
+		System.setOut(old);
+    }
+    
+    @Test
+    void test_button_direct_switch_off_message() {
 		System.setOut(ps);
 		ps.flush();
 		testButton.switchOff();
-		testButton.switchOff();
+		testButton.switchOff();	// regular button should print the same if switched twice
 		String msg = baos.toString();
+		assertEquals(String.format("Button switched to OFF\n"
+								 + "Lightbulb off.\n"
+								 + "Button switched to OFF\n"
+								 + "Lightbulb off.\n"), msg);
 		System.setOut(old);
-		assertEquals(String.format("Button switched to OFF\nButton switched to OFF"), msg);
+    }
+    
+    @Test
+    void test_pushdown_button_switch_on() {
+    	testLight.off();
+    	testPButton.pushButton();
+		assertEquals(testLight.isOn(), true);
+    }
+    
+    @Test
+    void test_pushdown_button_switch_off() {
+    	testLight.on();
+    	testPButton.pushButton();
+		assertEquals(testLight.isOn(), false);
+    }
+	
+    @Test
+    void test_pushdown_button_switch_twice_from_off() {
+    	testLight.off();
+    	testPButton.pushButton();
+    	testPButton.pushButton(); // restore original state
+		assertEquals(testLight.isOn(), false);
+    }
+    
+    @Test
+    void test_pushdown_button_switch_twice_from_on() {
+    	testLight.on();
+    	testPButton.pushButton();
+    	testPButton.pushButton(); // restore original state
+		assertEquals(testLight.isOn(), true);
+    }
+    
+    @Test
+    void test_pushdown_button_switch_twice_from_off_message() {
+		testLight.off();
+		System.setOut(ps);
+		ps.flush();
+		testPButton.pushButton();
+		testPButton.pushButton(); // restore original state
+		String msg = baos.toString();
+		assertEquals(String.format("Button switched to ON\n"
+								 + "Lightbulb on.\n"
+								 + "Button switched to OFF\n"
+								 + "Lightbulb off.\n"), msg);
+		System.setOut(old);
+    }
+    
+    @Test
+    void test_pushdown_button_switch_twice_from_on_message() {
+		testLight.on();
+		System.setOut(ps);
+		ps.flush();
+		testPButton.pushButton();
+		testPButton.pushButton(); // restore original state
+		String msg = baos.toString();
+		assertEquals(String.format("Button switched to OFF\n"
+								 + "Lightbulb off.\n"
+								 + "Button switched to ON\n"
+								 + "Lightbulb on.\n"), msg);
+		System.setOut(old);
+    }
+    
+    @Test
+    void test_create_table_lamp_new_lightbulb() {
+    	TableLamp tableLamp = new TableLamp();
+    	assertEquals(tableLamp instanceof TableLamp, true);
+    }
+    
+    @Test
+    void test_create_table_lamp_existing_lightbulb() {
+    	Lightbulb existing = new Lightbulb();
+    	TableLamp tableLamp = new TableLamp(existing);
+    	assertEquals(tableLamp instanceof TableLamp, true);
+    }
+    
+    @Test
+    void test_table_lamp_switch_on() {
+    	testLight.off();
+    	testTLamp.pushButton();
+    	assertEquals(testLight.isOn(), true);
+    }
+    
+    @Test
+    void test_table_lamp_switch_off() {
+    	testLight.on();
+    	testTLamp.pushButton();
+    	assertEquals(testLight.isOn(), false);
+    }
+    
+    @Test
+    void test_table_lamp_switch_twice_from_off() {
+    	testLight.off();
+    	testTLamp.pushButton();
+    	testTLamp.pushButton();
+    	assertEquals(testLight.isOn(), false);
+    }
+    
+    @Test
+    void test_table_lamp_switch_off_twice() {
+    	testLight.on();
+    	testTLamp.pushButton();
+    	testTLamp.pushButton();
+    	assertEquals(testLight.isOn(), true);
     }
 }

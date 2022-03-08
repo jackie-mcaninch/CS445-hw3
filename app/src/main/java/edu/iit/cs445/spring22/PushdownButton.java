@@ -1,6 +1,6 @@
 package edu.iit.cs445.spring22;
 
-public class PushdownButton extends Button{
+public class PushdownButton extends Button {
 	public PushdownButton(PoweredObject target) {
 		super(target);
 	}
