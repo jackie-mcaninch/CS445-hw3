@@ -1,4 +1,4 @@
-package edu.iit.cs445.spring22;
+package poweredObjects;
 
 public abstract class PoweredObject {
 	private boolean isOn;
@@ -7,11 +7,11 @@ public abstract class PoweredObject {
 		this.isOn = false;
 	}
 	
-	public void on() {
+	public void connectPower() {
 		this.isOn = true;
 	}
 	
-	public void off() {
+	public void disconnectPower() {
 		this.isOn = false;
 	}
 	

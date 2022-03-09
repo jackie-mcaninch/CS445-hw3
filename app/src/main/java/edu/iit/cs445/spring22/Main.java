@@ -1,16 +1,20 @@
 package edu.iit.cs445.spring22;
 
+import powerControllers.*;
+import poweredObjects.*;
+
 public class Main {
 	public static void main(String[] args) {
-    	Lightbulb lightbulb = new Lightbulb();
-        Button button = new Button(lightbulb);
+        Button button = new Button();
         button.switchOn();
         button.switchOff();
         
-        TableLamp tablelamp = new TableLamp(lightbulb);
+        Lightbulb lightbulb = new Lightbulb();
+        lightbulb.connectPower();
+        lightbulb.disconnectPower();
+        
+        TableLamp tablelamp = new TableLamp();
         tablelamp.pushButton();
-        tablelamp.pushButton();
-        button.switchOn();
         tablelamp.pushButton();
     }
 }

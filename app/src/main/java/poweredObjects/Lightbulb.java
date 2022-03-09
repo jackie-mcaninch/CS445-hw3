@@ -1,4 +1,4 @@
-package edu.iit.cs445.spring22;
+package poweredObjects;
 
 public class Lightbulb extends PoweredObject{
 	
@@ -6,13 +6,13 @@ public class Lightbulb extends PoweredObject{
 		super();
 	}
 	
-	public void on() {
-		super.on();
+	public void connectPower() {
+		super.connectPower();
 		System.out.println("Lightbulb on.");
 	}
 	
-	public void off() {
-		super.off();
+	public void disconnectPower() {
+		super.disconnectPower();
 		System.out.println("Lightbulb off.");
 	}
 }
