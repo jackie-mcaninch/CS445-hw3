@@ -1,4 +1,4 @@
-# cs445-hw2
+# cs445-hw3
 
 ### Build and run instructions
 #### To build and run using the Makefile, first navigate to the project folder and then run the app by typing the following simple command in the terminal:
